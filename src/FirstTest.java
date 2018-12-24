@@ -2,21 +2,24 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 
 public class FirstTest {
 
-    private AppiumDriver driver;
+    public AppiumDriver driver;
 
     @Before
     public void setUp() throws Exception {
@@ -38,23 +41,43 @@ public class FirstTest {
         driver.quit();
     }
 
-
     @Test
-    public void ex2FindTextSearch() {
+    public void ex3CheckListSearchClearCheckNoElements() {
+        String text = "Welt";
+        By listOfElementsBy = By.xpath("//android.widget.TextView[contains(@text,'" + text + "')]");
+
         waitForElementPresentByAndClick(
                 By.className("android.widget.TextView"),
                 "Text element not found",
                 5);
-        WebElement element_to_send_string = waitForElementPresentBy(
+
+        waitForElementPresentByAndSendKeys(
                 By.className("android.widget.EditText"),
+                text,
                 "Edit text input not found",
                 5);
-        assertTrue("Text not found ",
-                element_to_send_string.getAttribute("text").equals("Search…"));
-        assertTrue("This assert should fail because text not present on the page",
-                element_to_send_string.getAttribute("text").equals("1Search…"));
 
+        waitForElementPresentBy(
+                listOfElementsBy,
+                "No results for search found",
+                5);
+        List<WebElement> listOfElements = driver.findElements(listOfElementsBy);
+        System.out.println("Size of found elements with text '" + text + "' is " + listOfElements.size());
+        assertTrue("Elements with text '" + text + "' not found", listOfElements.size() > 0);
+        waitForElementPresentByAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Close button not found",
+                5);
+        waitForElementPresentBy(
+                By.xpath("//*[@text='Search and read the free encyclopedia in your language']"),
+                "Text not found.",
+                5);
+        listOfElements = driver.findElements(listOfElementsBy);
+        System.out.println("Size of found elements with text '" + text + "' should be 0, actually it is " + listOfElements.size());
+        assertTrue("Elements with text '" + text + "' should be not found", listOfElements.size() == 0);
     }
+
+
 
     private WebElement waitForElementPresentBy(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -68,4 +91,9 @@ public class FirstTest {
         return element;
     }
 
+    private WebElement waitForElementPresentByAndSendKeys(By by, String keys, String errorMessage, long timeoutInSeconds) {
+        WebElement element = waitForElementPresentBy(by, errorMessage, timeoutInSeconds);
+        element.sendKeys(keys);
+        return element;
+    }
 }
