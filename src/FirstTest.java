@@ -1,6 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -41,8 +42,7 @@ public class FirstTest {
     public void ex4VerifyTextPresentInSearchResultsList() {
         String text = "Welt";
         By by = By.xpath("//*[@text='Search and read the free encyclopedia in your language']");
-        By listOfElementsBy = By.xpath("//android.widget.TextView[contains(@text,'" + text + "')]");
-
+        By listOfElementsBy = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']");
         waitForElementPresentByAndClick(
                 By.className("android.widget.TextView"),
                 "Text element not found",
@@ -53,11 +53,11 @@ public class FirstTest {
                 text,
                 "Edit text input not found",
                 5);
-        waitForElementPresentBy(listOfElementsBy, "No results for search found", 5);
         List<WebElement> listOfElements = driver.findElements(listOfElementsBy);
-
+        System.out.println(listOfElements.size());
+        Assert.assertTrue("No searh results for the word '" + text + "'", listOfElements.size() > 0);
         listOfElements.forEach((searchResult) -> System.out.println(searchResult.getText() + "; "));
-
+        listOfElements.forEach((searchResult) -> Assert.assertTrue(searchResult.getText().contains(text)));
     }
 
     private WebElement waitForElementPresentBy(By by, String errorMessage, long timeoutInSeconds) {
