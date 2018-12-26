@@ -40,7 +40,7 @@ public class FirstTest {
 
     @Test
     public void ex4VerifyTextPresentInSearchResultsList() {
-        String text = "Welt";
+        String text = "App";
         By by = By.xpath("//*[@text='Search and read the free encyclopedia in your language']");
         By listOfElementsBy = By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']");
         waitForElementPresentByAndClick(
@@ -57,7 +57,9 @@ public class FirstTest {
         System.out.println(listOfElements.size());
         Assert.assertTrue("No searh results for the word '" + text + "'", listOfElements.size() > 0);
         listOfElements.forEach((searchResult) -> System.out.println(searchResult.getText() + "; "));
-        listOfElements.forEach((searchResult) -> Assert.assertTrue(searchResult.getText().contains(text)));
+        listOfElements.forEach((searchResult) -> {
+            Assert.assertTrue("Text " + text + " was not fount in sentence " + searchResult.getText(), searchResult.getText().contains(text));
+        });
     }
 
     private WebElement waitForElementPresentBy(By by, String errorMessage, long timeoutInSeconds) {
