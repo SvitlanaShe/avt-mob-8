@@ -60,7 +60,7 @@ public class Ex6 {
                 By.xpath("//*[@text='Object-oriented programming language']"),
                 "Page title was not found",
                 1);
-        assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"));
+        assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "Title of article  was not found ");
 
     }
 
@@ -68,9 +68,9 @@ public class Ex6 {
         return driver.findElements(by).size();
     }
 
-    private void assertElementPresent(By by) {
+    private void assertElementPresent(By by, String errorMessage) {
         if (getAmountOfElements(by) > 0) {
-            throw new AssertionError("Title of article was not found. Locator: " + by);
+            throw new AssertionError(errorMessage + " Locator was not found. Locator: " + by);
         }
     }
 
