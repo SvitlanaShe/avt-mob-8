@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -35,6 +36,7 @@ public class Ex6 {
 
         driver = new AndroidDriver(new URL("http://127.00.1:4723/wd/hub"), capabilities);
 //        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
     @After
@@ -61,6 +63,7 @@ public class Ex6 {
                 "Page title was not found",
                 1);
         assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"), "Title of article  was not found ");
+        assertElementPresent(By.id("org.wikipedia:id/incorrectElement"), "This asssertion should fail because element is not present");
 
     }
 
@@ -69,7 +72,7 @@ public class Ex6 {
     }
 
     private void assertElementPresent(By by, String errorMessage) {
-        if (getAmountOfElements(by) > 0) {
+        if (getAmountOfElements(by) == 0) {
             throw new AssertionError(errorMessage + " Locator was not found. Locator: " + by);
         }
     }
