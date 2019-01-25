@@ -1,18 +1,13 @@
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
-import org.junit.After;
-import org.junit.Before;
+
+import lib.CoreTestCase;
+import lib.ui.MainPageObject;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
-
-public class Ex6 {
+public class Ex6 extends CoreTestCase {
     /*
     Написать тест, который открывает статью и убеждается,
      что у нее есть элемент title.
@@ -21,31 +16,16 @@ public class Ex6 {
        Если title не найден - тест падает с ошибкой.
      Метод можно назвать assertElementPresent.
      */
-    private AppiumDriver driver;
 
-    @Before
-    public void setUp() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "6.0");
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app", "C:\\Users\\svitlana.shepotilova.PS-1142-PC\\AndroidStudioProjects\\JavaAppiumAutomation\\apks\\org.wikipedia.apk");
+    private MainPageObject MainPageObject;
 
-        driver = new AndroidDriver(new URL("http://127.00.1:4723/wd/hub"), capabilities);
-//        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        driver.rotate(ScreenOrientation.PORTRAIT);
-    }
-
-    @After
-    public void tearDown() {
-        driver.quit();
+    protected void setUp() throws Exception {
+        super.setUp();
+        MainPageObject = new MainPageObject(driver);
     }
 
     @Test
-    public void checkTitlePresent() {
+    public void testCheckTitlePresent() {
         String text = "Java";
         waitForElementPresentByAndClick(
                 By.className("android.widget.TextView"),
