@@ -2,10 +2,13 @@ package lib;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.remote.MobilePlatform;
 import junit.framework.TestCase;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.net.URL;
 
 public class CoreTestCase extends TestCase {
@@ -15,35 +18,37 @@ public class CoreTestCase extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        File appDir = new File("apks");
+        File app = new File(appDir, "outfittery2301.apk");
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "6.0");
-        capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app", "C:\\Users\\svitlana.shepotilova.PS-1142-PC\\AndroidStudioProjects\\JavaAppiumAutomation\\apks\\org.wikipedia.apk");
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, MobilePlatform.ANDROID);
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "AndroidTestDevice");
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "6.0");
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "Appium");
+        capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,120);
+        capabilities.setCapability("appPackage", "de.outfittery.app.debug");
+        capabilities.setCapability("appActivity", "de.outfittery.appmain.ui.newuser.welcome.WelcomeActivity");
+        capabilities.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());//"C:\\Users\\svitlana.shepotilova.PS-1142-PC\\AndroidStudioProjects\\save\\JavaAppiumAutomation\\apks\\outfittery2301.apk");
 
         driver = new AndroidDriver(new URL(appiumUrl), capabilities);
-//        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         rotateScreenPortrait();
     }
 
     @Override
     public void tearDown() throws Exception {
-        driver.quit();
+        if (driver != null) driver.quit();
         super.tearDown();
     }
 
-    protected void rotateScreenPortrait(){
+    protected void rotateScreenPortrait() {
         driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
-    protected void rotateScreenLandscape(){
+    protected void rotateScreenLandscape() {
         driver.rotate(ScreenOrientation.LANDSCAPE);
     }
 
-    protected void backgroundApp(int seconds){
+    protected void backgroundApp(int seconds) {
         driver.runAppInBackground(seconds);
     }
 }

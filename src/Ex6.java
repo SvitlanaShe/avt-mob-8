@@ -1,6 +1,6 @@
 
 import lib.CoreTestCase;
-import lib.ui.MainPageObject;
+import lib.ui.BasePageObject;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,11 +17,11 @@ public class Ex6 extends CoreTestCase {
      Метод можно назвать assertElementPresent.
      */
 
-    private MainPageObject MainPageObject;
+    private BasePageObject BasePageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
-        MainPageObject = new MainPageObject(driver);
+        BasePageObject = new BasePageObject(driver);
     }
 
     @Test

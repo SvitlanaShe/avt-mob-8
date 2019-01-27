@@ -4,7 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
+public class ArticlePageObject extends BasePageObject {
 
     private static final String
             TITLE = "org.wikipedia:id/view_page_title_text",
